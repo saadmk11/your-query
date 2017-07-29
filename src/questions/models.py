@@ -18,6 +18,9 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse("questions:category", kwargs={"slug": self.slug})
 
+    class Meta:
+        ordering = ['-id']
+
 
 class Question(models.Model):
     user = models.ForeignKey(User)
@@ -31,6 +34,12 @@ class Question(models.Model):
     def __unicode__(self):
         return self.qus
 
+    def get_absolute_url(self):
+        return reverse("questions:question_detail", kwargs={"slug": self.slug})
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
     def _get_unique_slug(self):
         slug = slugify(self.qus)
         unique_slug = slug
@@ -43,7 +52,7 @@ class Question(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self._get_unique_slug()
-        super().save()
+        super(Question, self).save()
 
 
 class Answer(models.Model):
@@ -55,4 +64,7 @@ class Answer(models.Model):
 
     def __unicode__(self):
         return self.question.qus
+
+    class Meta:
+        ordering = ['-updated', '-created']
 

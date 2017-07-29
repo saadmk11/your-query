@@ -1,3 +1,4 @@
 {% for question in queryset %}
-{{ question.qus }}<br>
+<a href="{{question.get_absolute_url}}">{{ question.qus }}</a><br>
+
 {% endfor %}

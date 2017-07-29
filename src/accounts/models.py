@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+USERNAME_REGEX = '^[a-zA-Z0-9.+-]*$'
+
+
 class User(AbstractUser):
-    username = models.CharField(max_length=512, unique=True, blank=False)
+    username = models.CharField(max_length=512, unique=True, blank=False,
+                                validators=[
+                                        RegexValidator(
+                                        regex = USERNAME_REGEX,
+                                        message = 'Username must be Alpahnumeric or contain any of the following: ".+ -" ',
+                                        code='invalid_username'
+                                        )]
+                                )
     email = models.EmailField(unique=True, blank=False)
     bio = models.CharField(max_length=512, blank=True)
     birth_date = models.DateField(null=True, blank=True)

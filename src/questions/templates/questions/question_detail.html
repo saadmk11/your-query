@@ -1,12 +1,21 @@
 {{ question.qus }}<br>
 <a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a><br>
-
-{{ question.category }}<br>
+<a href="{{question.category.get_absolute_url}}">{{ question.category }}</a><br>
 {{ question.created }}<br>
 {{ question.updated }}<br>
 <p>{{ question.details }}</p><br>
 
-{% for answer in answers %}
+<form method="POST" action="" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value='submit'>
+</form>
+
+
+{% for answer in answers_list %}
 <a href="{{answer.user.get_absolute_url}}">{{ answer.user.username }}</a><br>
+{{ answer.created }}<br>
+{{ answer.updated }}<br>
 <p>{{ answer.ans }}</p>
+
 {% endfor %}
