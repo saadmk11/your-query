@@ -1,0 +1,12 @@
+{{ question.qus }}<br>
+<a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a><br>
+
+{{ question.category }}<br>
+{{ question.created }}<br>
+{{ question.updated }}<br>
+<p>{{ question.details }}</p><br>
+
+{% for answer in answers %}
+<a href="{{answer.user.get_absolute_url}}">{{ answer.user.username }}</a><br>
+<p>{{ answer.ans }}</p>
+{% endfor %}

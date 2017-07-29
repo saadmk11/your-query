@@ -1,0 +1,3 @@
+{% for obj in categories %}
+<a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a>
+{% endfor %}

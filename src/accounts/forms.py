@@ -22,14 +22,15 @@ class UserLoginForm(forms.Form):
 
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
+
 class UserRegistrationForm(UserCreationForm):
+    bio = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = User
         fields = ("username", "email", "birth_date", "bio", "picture", "password1", "password2" )
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
         user.username = self.cleaned_data['username']
         user.email = self.cleaned_data['email']
         user.birth_date = self.cleaned_data['birth_date']

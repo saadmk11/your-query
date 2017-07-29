@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class User(AbstractUser):
@@ -19,4 +20,8 @@ class User(AbstractUser):
     width_field = models.IntegerField(default=600)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    def get_absolute_url(self):
+        return reverse("user_profile", kwargs={"username": self.username})
+
     
