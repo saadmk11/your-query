@@ -38,3 +38,9 @@ class UserRegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class UserProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User 
+        fields = ("email", "bio", "birth_date", "picture")

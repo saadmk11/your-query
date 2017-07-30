@@ -17,7 +17,11 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from accounts.views import login_view, register_view, logout_view, user_profile
+from accounts.views import (login_view, 
+                            register_view, 
+                            logout_view, 
+                            user_profile, 
+                            user_profile_update)
 from contact.views import contact
 from core.views import home, about
 
@@ -28,6 +32,7 @@ urlpatterns = [
     url(r'^about/$', about, name='about'),
     #Accounts
     url(r'^profile/(?P<username>\w+)/$', user_profile, name='user_profile'),
+    url(r'^profile/(?P<username>\w+)/edit/$', user_profile_update, name='user_profile_update'),
     url(r'^login/$', login_view, name='login'),
     url(r'^register/$', register_view, name='register'),
     url(r'^logout/$', logout_view, name='logout'),
