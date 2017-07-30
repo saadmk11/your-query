@@ -2,9 +2,14 @@
 <h3>{{ question.qus }}</h3><br>
 <a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a><br>
 <a href="{{question.category.get_absolute_url}}">{{ question.category }}</a><br>
+{% if request.user == question.user %}
+<a href="{{question.get_absolute_url}}edit/">Edit</a><br>
+<a href="{{question.get_absolute_url}}delete/">Delete</a><br>
+{% endif %}
 {{ question.created }}<br>
 {{ question.updated }}<br>
 <p>{{ question.details }}</p><br>
+
 {% if request.user.is_authenticated %}
 <form method="POST" action="" >
     {% csrf_token %}
@@ -12,9 +17,15 @@
     <input type="submit" value='submit'>
 </form>
 {% endif %}
+
+
 <h2>Answers:</h2>
 {% for answer in answers_list %}
 <a href="{{answer.user.get_absolute_url}}">{{ answer.user.username }}</a><br>
+{% if request.user == answer.user %}
+<a href="{% url 'questions:answer_update' slug=answer.question.slug pk=answer.pk %}">Edit</a><br>
+<a href="{% url 'questions:answer_delete' slug=answer.question.slug pk=answer.pk %}">Delete</a><br>
+{% endif %}
 {{ answer.created }}<br>
 {{ answer.updated }}<br>
 <p>{{ answer.ans }}</p>
