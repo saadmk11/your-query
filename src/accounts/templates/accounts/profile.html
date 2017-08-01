@@ -11,3 +11,10 @@ Asked: {{ user_profile.question_set.count }}<br>
 {{ user_profile.date_joined }}<br>
 <p>{{ user_profile.bio }}</p><br>
 
+<h3>Questions Asked:</h3>
+{% for question in user_questions %}
+<a href="{{question.get_absolute_url}}">{{ question.qus }}</a><br>
+{% endfor %}
+
+
+

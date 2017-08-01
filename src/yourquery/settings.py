@@ -58,6 +58,8 @@ ROOT_URLCONF = 'yourquery.urls'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+LOGIN_URL = "/login/"
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

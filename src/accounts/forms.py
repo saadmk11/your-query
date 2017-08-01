@@ -27,12 +27,14 @@ class UserRegistrationForm(UserCreationForm):
     bio = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = User
-        fields = ("username", "email", "birth_date", "bio", "picture", "password1", "password2" )
+        fields = ("first_name", "last_name", "username", "email", "birth_date", "bio", "picture", "password1", "password2" )
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         user.username = self.cleaned_data['username']
         user.email = self.cleaned_data['email']
+        user.email = self.cleaned_data['first_name']
+        user.email = self.cleaned_data['last_name']
         user.birth_date = self.cleaned_data['birth_date']
         user.bio = self.cleaned_data['bio']
         if commit:
@@ -41,6 +43,7 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserProfileUpdateForm(forms.ModelForm):
+    bio = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = User 
-        fields = ("email", "bio", "birth_date", "picture")
+        fields = ("first_name", "last_name", "email", "bio", "birth_date", "picture")

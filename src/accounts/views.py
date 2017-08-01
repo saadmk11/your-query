@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf import settings
-from django.contrib.auth import (
-    authenticate,
-    login,
-    logout,
-    )
+from django.contrib.auth import (authenticate,
+                                 login,
+                                 logout
+                                )
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserLoginForm, UserRegistrationForm, UserProfileUpdateForm
@@ -55,10 +54,13 @@ def logout_view(request):
 
 def user_profile(request, username=None):
     user_profile = get_object_or_404(User, username=username)
-    context = { "user_profile": user_profile }
+    user_questions = user_profile.question_set.all()
+    context = { "user_profile": user_profile, 
+                "user_questions": user_questions 
+              }
     return render(request, "accounts/profile.html", context)
 
-
+@login_required()
 def user_profile_update(request, username=None):
     instance = get_object_or_404(User, username=username)
     if request.user.username != instance.username:

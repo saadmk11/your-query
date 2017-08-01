@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import QuestionForm, AnswerForm
@@ -9,7 +12,24 @@ from .models import Category, Question, Answer
 
 def question_list(request):
     queryset = Question.objects.all()
-    context = { "queryset": queryset }
+
+    query = request.GET.get("q")   
+    if query:
+        queryset = queryset.filter(
+            Q(qus__icontains=query)|
+            Q(category__name__icontains=query)
+            ).distinct()
+
+    paginator = Paginator(queryset, 12)
+    page = request.GET.get("page")
+    try:
+        query_list = paginator.page(page)
+    except PageNotAnInteger:
+        query_list = paginator.page(1)
+    except EmptyPage:
+        query_list = paginator.page(paginator.num_pages)
+
+    context = { "query_list": query_list }
     return render(request, "questions/question_list.html", context)
 
 
@@ -30,10 +50,10 @@ def question_detail(request, slug=None):
         context = { "question": question,
                     "form": form,
                     "answers_list": answers_list,
-                     }
+                  }
     return render(request, "questions/question_detail.html", context)
 
-
+@login_required()
 def question_ask(request):
     if not request.user.is_authenticated:
         return redirect("login")
@@ -49,7 +69,7 @@ def question_ask(request):
                      }
     return render(request, "questions/ask.html", context)
 
-
+@login_required()
 def question_update(request, slug=None):
     instance = get_object_or_404(Question, slug=slug)
     if instance.user != request.user:
@@ -66,7 +86,7 @@ def question_update(request, slug=None):
                     }
     return render(request, "questions/ask.html", context)
 
-
+@login_required()
 def question_delete(request, slug=None):
     question = get_object_or_404(Question, slug=slug)
     if not request.user.is_authenticated:
@@ -76,13 +96,12 @@ def question_delete(request, slug=None):
             raise Http404
         else:
             question.delete() 
-            return redirect("home") 
+            return redirect(request.user.get_absolute_url()) 
 
-
+@login_required()
 def answer_update(request, slug=None, pk=None):
     question = get_object_or_404(Question, slug=slug)
     instance = get_object_or_404(Answer, pk=pk)
-    print instance.pk
     if instance.user != request.user:
         raise Http404
     else:
@@ -98,7 +117,7 @@ def answer_update(request, slug=None, pk=None):
                     }
     return render(request, "questions/answer.html", context)
 
-
+@login_required()
 def answer_delete(request, slug=None, pk=None):
     question = get_object_or_404(Question, slug=slug)
     answer = get_object_or_404(Answer, pk=pk)
@@ -121,5 +140,21 @@ def category_list(request):
 def category(request, slug=None):
     category = get_object_or_404(Category, slug=slug)   
     queryset = category.question_set.all()
-    context = { "queryset": queryset }
+
+    query = request.GET.get("q")   
+    if query:
+        queryset = queryset.filter(
+            Q(qus__icontains=query)
+            ).distinct()
+
+    paginator = Paginator(queryset, 12)
+    page = request.GET.get("page")
+    try:
+        query_list = paginator.page(page)
+    except PageNotAnInteger:
+        query_list = paginator.page(1)
+    except EmptyPage:
+        query_list = paginator.page(paginator.num_pages)
+        
+    context = { "query_list": query_list }
     return render(request, "questions/category.html", context)
