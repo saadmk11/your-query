@@ -1,5 +1,15 @@
-<form method="POST" action="" >
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Profile Update | {{ block.super }}{% endblock title %}
+
+{% block content %}
+<h1>Edit Profile</h1>
+<hr>
+<form method="POST" action="" enctype='multipart/form-data'>
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value='{{ title }}'>
+    {{ form|crispy }}
+    <br>
+    <input class="btn btn-success" type="submit" value='{{ title }}'>
 </form>
+
+{% endblock content %}

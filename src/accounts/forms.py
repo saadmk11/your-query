@@ -24,7 +24,7 @@ class UserLoginForm(forms.Form):
 
 
 class UserRegistrationForm(UserCreationForm):
-    bio = forms.CharField(widget=forms.Textarea)
+    bio = forms.CharField(required=False, widget=forms.Textarea)
     class Meta:
         model = User
         fields = ("first_name", "last_name", "username", "email", "birth_date", "bio", "picture", "password1", "password2" )
@@ -33,8 +33,8 @@ class UserRegistrationForm(UserCreationForm):
         user = super(UserCreationForm, self).save(commit=False)
         user.username = self.cleaned_data['username']
         user.email = self.cleaned_data['email']
-        user.email = self.cleaned_data['first_name']
-        user.email = self.cleaned_data['last_name']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         user.birth_date = self.cleaned_data['birth_date']
         user.bio = self.cleaned_data['bio']
         if commit:
@@ -43,7 +43,7 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserProfileUpdateForm(forms.ModelForm):
-    bio = forms.CharField(widget=forms.Textarea)
+    bio = forms.CharField(required=False, widget=forms.Textarea)
     class Meta:
         model = User 
         fields = ("first_name", "last_name", "email", "bio", "birth_date", "picture")

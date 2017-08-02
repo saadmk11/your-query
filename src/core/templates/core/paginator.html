@@ -1,0 +1,17 @@
+<div style="float: right;">
+<div class="pagination">
+    <em class="step-links">
+        {% if query_list.has_previous %}
+            <a href="?page={{ query_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        &nbsp;<em class="current">
+            Page {{ query_list.number }} of {{ query_list.paginator.num_pages }}.
+        </em>&nbsp;
+
+        {% if query_list.has_next %}
+            <a href="?page={{ query_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+        {% endif %}
+    </em>
+</div>
+</div>

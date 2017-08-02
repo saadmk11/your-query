@@ -65,7 +65,7 @@ def question_ask(request):
             question.save()
             return redirect(question.get_absolute_url())
         context = { "form": form,
-                    "title": "ask"
+                    "title": "Ask Question"
                      }
     return render(request, "questions/ask.html", context)
 
@@ -82,7 +82,7 @@ def question_update(request, slug=None):
             question.save()
             return redirect(question.get_absolute_url())
         context = { "form": form,
-                    "title": "Update"
+                    "title": "Edit Question"
                     }
     return render(request, "questions/ask.html", context)
 
@@ -113,7 +113,7 @@ def answer_update(request, slug=None, pk=None):
             answer.save()
             return redirect(question.get_absolute_url())
         context = { "form": form,
-                    "title": "Update"
+                    "title": "Update Answer"
                     }
     return render(request, "questions/answer.html", context)
 
@@ -156,5 +156,7 @@ def category(request, slug=None):
     except EmptyPage:
         query_list = paginator.page(paginator.num_pages)
         
-    context = { "query_list": query_list }
+    context = { "query_list": query_list,
+                "category": category
+              }
     return render(request, "questions/category.html", context)

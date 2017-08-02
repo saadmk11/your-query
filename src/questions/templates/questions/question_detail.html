@@ -1,3 +1,10 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Details | {{ block.super }}{% endblock title %}
+
+{% block content %}
+
+
 <h2>Question:</h2>
 <h3>{{ question.qus }}</h3><br>
 <a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a><br>
@@ -13,8 +20,9 @@
 {% if request.user.is_authenticated %}
 <form method="POST" action="" >
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value='submit'>
+    {{ form|crispy }}
+    <br>
+    <input class="btn btn-success" type="submit" value='Submit'>
 </form>
 {% endif %}
 
@@ -31,3 +39,6 @@
 <p>{{ answer.ans }}</p>
 
 {% endfor %}
+
+
+{% endblock content %}

@@ -1,36 +1,30 @@
-<div style="float: right;">
-<form method='GET' action=''>
-<input type='text' name='q' placeholder='Search' value='{{ request.GET.q }}'/>
-<input type='submit' value='Search' />
-</form>
-</div>
+{% extends "core/base.html" %}
+
+{% block title %} Questions | {{ block.super }}{% endblock title %}
+
+{% block content %}
+
+{% include "core/search.html" %}
+
+<a class="btn btn-success" href="{% url 'questions:question_ask' %}">Ask your Questions</a>
 <hr>
-{% if request.GET.q %}
 
-<p>showing search results for "{{ request.GET.q }}"</p><br>
-
-{% endif %}
-
-
+<h1>All Questions</h1>
+<hr>
 {% for question in query_list %}
-<a href="{{question.get_absolute_url}}">{{ question.qus }}</a><br>
+<div class="list-group">
+  <a href="{{question.get_absolute_url}}" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h4 class="mb-1"><b>{{ question.qus }}</b></h4>
+      <small>Asked {{ question.updated|timesince }} ago By <b>{{ question.user.username }}</b></small><br>
+      <small><b>Category:</b> {{ question.category }}</small>
+    </div>
+    <p class="mb-1">{{ question.details|linebreaks|truncatechars:120 }}</p>
 
+  </a>
+</div>
 {% endfor %}
 
-<div style="float: right;">
-<div class="pagination">
-    <em class="step-links">
-        {% if query_list.has_previous %}
-            <a href="?page={{ query_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
-        {% endif %}
+{% include "core/paginator.html" %}
 
-        &nbsp;<em class="current">
-            Page {{ query_list.number }} of {{ query_list.paginator.num_pages }}.
-        </em>&nbsp;
-
-        {% if query_list.has_next %}
-            <a href="?page={{ query_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
-        {% endif %}
-    </em>
-</div>
-</div>
+{% endblock content %}

@@ -1,20 +1,105 @@
-{{ user_profile.username }}<br>
-{{ user_profile.email }}<br>
+{% extends 'core/base.html' %}
 
-{% if request.user.username == user_profile.username %}
-<a href="{{user_profile.get_absolute_url}}edit/">Edit</a><br>
-{% endif %}
+{% block title %} Profile | {{ block.super }}{% endblock title %}
 
-Answered: {{ user_profile.answer_set.count }}<br>
-Asked: {{ user_profile.question_set.count }}<br>
-{{ user_profile.birth_date }}<br>
-{{ user_profile.date_joined }}<br>
-<p>{{ user_profile.bio }}</p><br>
+{% block content %}
+<hr>
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-sm-10"><h1>{{ user_profile.first_name }} {{ user_profile.last_name }}</h1><hr>
+        <b>Email: </b><a href="mailto:#">{{ user_profile.email }}</a><br>
+        {% if user_profile.birth_date %}
+        <small><b>Date of Birth:</b> {{ user_profile.birth_date }}</small><br>
+        {% endif %}
+        {% if request.user.username == user_profile.username %}
+        <br>
+        <a class="btn btn-success btn-sm" href="{{user_profile.get_absolute_url}}edit/"" role="button">Edit</a>
+        {% endif %}
+        </div>
 
-<h3>Questions Asked:</h3>
-{% for question in user_questions %}
-<a href="{{question.get_absolute_url}}">{{ question.qus }}</a><br>
-{% endfor %}
+        {% if user_profile.picture %}
+        <div class="col-sm-2"><a href="{{ user_profile.get_absolute_url }}" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="{{ user_profile.picture.url }}"></a></div>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3"><!--left col-->
+              
+          <ul class="list-group">
+            <li class="list-group-item text-muted">Profile</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Username</strong></span>{{ user_profile.username }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span>{{ user_profile.date_joined|date:'d-m-Y' }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span>{{ user_profile.last_login|timesince }} ago</li>
+
+            
+          </ul> 
+               
+<!--           <div class="panel panel-default">
+            <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
+            <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
+          </div> -->
+          
+          
+          <ul class="list-group">
+            <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Asked</strong></span> {{ user_profile.question_set.count }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Answered</strong></span> {{ user_profile.answer_set.count }}</li>
+          </ul> 
+               
+<!--           <div class="panel panel-default">
+            <div class="panel-heading">Social Media</div>
+            <div class="panel-body">
+                <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
+            </div>
+          </div> -->
+          
+        </div><!--/col-3-->
 
 
 
+        <div class="col-sm-9">
+          
+          <ul class="nav nav-tabs" id="myTab">
+          {% if user_profile.bio %} 
+            <li class="active"><a href="#bio" data-toggle="tab">Bio</a></li>
+            <li><a href="#questions" data-toggle="tab">Questions Asked</a></li>
+            {% else %}
+            <li class="active"><a href="#questions" data-toggle="tab">Questions</a></li>
+            {% endif %}
+          </ul>
+        {% if user_profile.bio %} 
+          <div class="tab-content">
+            <div class="tab-pane active" id="bio">
+              <hr>
+                <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Bio</h3>
+                </div>
+                    <div class="panel-body">
+                        {{ user_profile.bio }}
+                    </div>
+                </div>
+
+              
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-4 text-center">
+                    <ul class="pagination" id="myPager"></ul>
+                  </div>
+
+              </div><!--/table-resp-->
+              {% endif %}
+
+              
+             </div><!--/tab-pane-->
+             <div class="tab-pane" id="questions">
+               <hr>
+                <ul class="list-group">
+                {% for question in user_questions %}
+                    <li class="list-group-item text-right"><a href="{{question.get_absolute_url}}" class="pull-left">{{ question.qus }}</a> {{ question.updated|date:'d-m-Y' }}</li>
+                {% endfor %}                 
+                  
+                </ul> 
+               
+             </div><!--/tab-pane-->
+
+{% endblock content %}

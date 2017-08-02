@@ -12,7 +12,7 @@ from .models import User
 
 # Create your views here.
 def login_view(request):
-    title = "login"
+    title = "Login"
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
         email = form.cleaned_data.get("email")
@@ -29,7 +29,7 @@ def login_view(request):
 
 def register_view(request):
     title = "Register"
-    form = UserRegistrationForm(request.POST or None)
+    form = UserRegistrationForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         user = form.save(commit=False)
         password = form.cleaned_data.get("password1")
@@ -66,11 +66,12 @@ def user_profile_update(request, username=None):
     if request.user.username != instance.username:
         raise Http404
     else:
-        form = UserProfileUpdateForm(request.POST or None, instance=instance)
+        form = UserProfileUpdateForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             email = form.cleaned_data.get("email")
             profile = form.save(commit=False)
             profile.email = email
+            print profile.picture
             profile.save()
             return redirect(profile.get_absolute_url())
         context = {

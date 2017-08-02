@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'contact',
     'core',
     'questions',
+    #Third party apps
+    'crispy_forms',
+
 ]
 
 MIDDLEWARE = [
@@ -59,6 +62,8 @@ ROOT_URLCONF = 'yourquery.urls'
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = "/login/"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 TEMPLATES = [
     {
@@ -144,3 +149,4 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False 
 EMAIL_PORT = 1025
+
