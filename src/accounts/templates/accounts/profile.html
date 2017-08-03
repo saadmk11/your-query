@@ -30,32 +30,14 @@
             <li class="list-group-item text-right"><span class="pull-left"><strong>Username</strong></span>{{ user_profile.username }}</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span>{{ user_profile.date_joined|date:'d-m-Y' }}</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span>{{ user_profile.last_login|timesince }} ago</li>
-
-            
           </ul> 
-               
-<!--           <div class="panel panel-default">
-            <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
-            <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
-          </div> -->
-          
-          
+              
           <ul class="list-group">
             <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Asked</strong></span> {{ user_profile.question_set.count }}</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Answered</strong></span> {{ user_profile.answer_set.count }}</li>
-          </ul> 
-               
-<!--           <div class="panel panel-default">
-            <div class="panel-heading">Social Media</div>
-            <div class="panel-body">
-                <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
-            </div>
-          </div> -->
-          
+          </ul>  
         </div><!--/col-3-->
-
-
 
         <div class="col-sm-9">
           
@@ -89,7 +71,6 @@
 
               </div><!--/table-resp-->
               {% endif %}
-
               
              </div><!--/tab-pane-->
              <div class="tab-pane" id="questions">

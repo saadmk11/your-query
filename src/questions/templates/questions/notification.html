@@ -12,7 +12,7 @@
     <div class="list-group">
     <a href="{{ obj.question.get_absolute_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
-      <h4 class="mb-1"><b>{{ obj.message }} on {{ obj.question }}</b></h4>
+      <h4 class="mb-1"><b>{{ obj.message }} for "{{ obj.question }}"</b></h4>
         {{ obj.sent|timesince }} ago from <b>{{ obj.from_user }}</b>
     </div>
     <p class="mb-1">{{ question.details|linebreaks|truncatechars:120 }}</p>

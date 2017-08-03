@@ -5,17 +5,18 @@
 }
 
 #nav-img {
-
     height: 35px;
     width: 35px;  
 }
 
 .thumbnail {
-    padding:0px;
+    padding: 0px;
 }
+
 .panel {
     position:relative;
 }
+
 .panel>.panel-heading:after,.panel>.panel-heading:before{
     position:absolute;
     top:11px;left:-16px;
@@ -28,12 +29,14 @@
     border-style:solid solid outset;
     pointer-events:none;
 }
+
 .panel>.panel-heading:after{
     border-width:7px;
     border-right-color:#f7f7f7;
     margin-top:1px;
     margin-left:2px;
 }
+
 .panel>.panel-heading:before{
     border-right-color:#ddd;
     border-width:8px;

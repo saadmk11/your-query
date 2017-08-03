@@ -25,6 +25,7 @@ from accounts.views import (login_view,
 from contact.views import contact
 from core.views import home, about
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     #Core

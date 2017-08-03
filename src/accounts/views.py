@@ -11,13 +11,14 @@ from .forms import UserLoginForm, UserRegistrationForm, UserProfileUpdateForm
 from .models import User
 
 # Create your views here.
-def login_view(request):
+def login_view(request): # users will login with their Email & Password
     title = "Login"
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
-        user = authenticate(email=email, password=password)
+        # authenticates Email & Password
+        user = authenticate(email=email, password=password) 
         login(request, user)
         return redirect("home")
     context = {"form":form,
@@ -27,7 +28,7 @@ def login_view(request):
     return render(request, "accounts/form.html", context)
 
 
-def register_view(request):
+def register_view(request): # Creates a New Account & login New users
     title = "Register"
     form = UserRegistrationForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -44,7 +45,7 @@ def register_view(request):
     return render(request, "accounts/form.html", context)
 
 
-def logout_view(request):
+def logout_view(request): # logs out the logged in users
     if not request.user.is_authenticated():
         return redirect("login")
     else:
@@ -52,7 +53,7 @@ def logout_view(request):
         return redirect("home")
 
 
-def user_profile(request, username=None):
+def user_profile(request, username=None): # Displays User Profile
     user_profile = get_object_or_404(User, username=username)
     user_questions = user_profile.question_set.all()
     context = { "user_profile": user_profile, 
@@ -60,8 +61,9 @@ def user_profile(request, username=None):
               }
     return render(request, "accounts/profile.html", context)
 
+
 @login_required()
-def user_profile_update(request, username=None):
+def user_profile_update(request, username=None): # updates User profile
     instance = get_object_or_404(User, username=username)
     if request.user.username != instance.username:
         raise Http404
@@ -71,14 +73,10 @@ def user_profile_update(request, username=None):
             email = form.cleaned_data.get("email")
             profile = form.save(commit=False)
             profile.email = email
-            print profile.picture
-            profile.save()
+            profile.save() # Saves the Updated Profile
             return redirect(profile.get_absolute_url())
         context = {
                   "form": form,
                   "title": "update"
                 }
         return render(request, "accounts/profile_update.html", context)
-
-
-

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms.extras.widgets import SelectDateWidget
 from .models import User
 
+
 class UserLoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -30,7 +31,15 @@ class UserRegistrationForm(UserCreationForm):
     birth_date = forms.DateField(widget=SelectDateWidget(years=range(1940, 2010)))
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "username", "email", "birth_date", "bio", "picture", "password1", "password2" )
+        fields = ("first_name",
+                  "last_name", 
+                  "username", 
+                  "email", 
+                  "birth_date", 
+                  "bio", 
+                  "picture", 
+                  "password1", 
+                  "password2" )
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
@@ -50,4 +59,9 @@ class UserProfileUpdateForm(forms.ModelForm):
     birth_date = forms.DateField(widget=SelectDateWidget(years=range(1940, 2010)))
     class Meta:
         model = User 
-        fields = ("first_name", "last_name", "email", "bio", "birth_date", "picture")
+        fields = ("first_name", 
+                  "last_name", 
+                  "email", 
+                  "bio", 
+                  "birth_date", 
+                  "picture")

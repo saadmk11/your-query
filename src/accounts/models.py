@@ -40,20 +40,19 @@ class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     picture = models.ImageField(null=True, 
                                 blank=True, 
-                                default='default.png',
+                                default='img/default.png',
                                 height_field="height_field", 
                                 width_field="width_field",
                                 verbose_name="profile picture"
                                 )
-    height_field = models.IntegerField(null=True, blank=True, default=600)
-    width_field = models.IntegerField(null=True, blank=True, default=600)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    height_field = models.IntegerField(default=600, null=True)
+    width_field = models.IntegerField(default=600, null=True)
+    USERNAME_FIELD = 'email' # use email to log in
+    REQUIRED_FIELDS = ['username'] # required when user is created
 
     def __unicode__(self):
         return self.username
 
     def get_absolute_url(self):
         return reverse("user_profile", kwargs={"username": self.username})
-
     

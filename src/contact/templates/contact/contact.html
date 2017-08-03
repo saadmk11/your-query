@@ -1,8 +1,11 @@
 {% extends "core/base.html" %}
+
 {% load crispy_forms_tags %}
+
 {% block title %} Contact | {{ block.super }}{% endblock title %}
 
 {% block content %}
+
 <h2>Contact US</h2><hr>
 <form method="POST" action="" >
     {% csrf_token %}
@@ -10,6 +13,5 @@
     <br>
     <input class="btn btn-success" type="submit" value='Submit'>
 </form>
+
 {% endblock content %}
-
-

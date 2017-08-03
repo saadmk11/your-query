@@ -10,6 +10,7 @@ from django.utils.text import slugify
 # Create your models here.
 User = settings.AUTH_USER_MODEL
 
+
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True, verbose_name="category")
     slug = models.SlugField(unique=True)
@@ -96,4 +97,7 @@ def send_notification(sender, **kwargs):
         else:
             from_user = instance.user
             user = question.user
-            notification = SendNotification.objects.create(user=user, from_user=from_user, question=question, message="You Have an Answer!")
+            notification = SendNotification.objects.create(user=user, 
+                                                           from_user=from_user, 
+                                                           question=question, 
+                                                           message="You Have an Answer!")
