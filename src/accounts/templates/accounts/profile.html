@@ -13,7 +13,7 @@
         {% endif %}
         {% if request.user.username == user_profile.username %}
         <br>
-        <a class="btn btn-success btn-sm" href="{{user_profile.get_absolute_url}}edit/"" role="button">Edit</a>
+        <a class="btn btn-success btn-sm" href="{{user_profile.get_absolute_url}}edit/" role="button">Edit</a>
         {% endif %}
         </div>
 
@@ -64,11 +64,12 @@
             <li class="active"><a href="#bio" data-toggle="tab">Bio</a></li>
             <li><a href="#questions" data-toggle="tab">Questions Asked</a></li>
             {% else %}
-            <li class="active"><a href="#questions" data-toggle="tab">Questions</a></li>
+            <li class="active"><a href="#questions" data-toggle="tab">Questions Asked</a></li>
             {% endif %}
           </ul>
-        {% if user_profile.bio %} 
+        
           <div class="tab-content">
+          {% if user_profile.bio %} 
             <div class="tab-pane active" id="bio">
               <hr>
                 <div class="panel panel-default">

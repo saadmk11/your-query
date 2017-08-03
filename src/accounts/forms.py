@@ -1,6 +1,8 @@
+import datetime
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.extras.widgets import SelectDateWidget
 from .models import User
 
 class UserLoginForm(forms.Form):
@@ -25,6 +27,7 @@ class UserLoginForm(forms.Form):
 
 class UserRegistrationForm(UserCreationForm):
     bio = forms.CharField(required=False, widget=forms.Textarea)
+    birth_date = forms.DateField(widget=SelectDateWidget(years=range(1940, 2010)))
     class Meta:
         model = User
         fields = ("first_name", "last_name", "username", "email", "birth_date", "bio", "picture", "password1", "password2" )
@@ -44,6 +47,7 @@ class UserRegistrationForm(UserCreationForm):
 
 class UserProfileUpdateForm(forms.ModelForm):
     bio = forms.CharField(required=False, widget=forms.Textarea)
+    birth_date = forms.DateField(widget=SelectDateWidget(years=range(1940, 2010)))
     class Meta:
         model = User 
         fields = ("first_name", "last_name", "email", "bio", "birth_date", "picture")

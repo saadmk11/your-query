@@ -7,12 +7,14 @@ from .views import (question_list,
                     category,
                     answer_update,
                     question_delete,
-                    answer_delete)
+                    answer_delete,
+                    notification)
 
 
 urlpatterns = [
     url(r'^$', question_list, name='question_list'),
     url(r'^ask/$', question_ask, name='question_ask'),
+    url(r'^notifications/$', notification, name='notification'),
     url(r'^categories/$', category_list, name='category_list'),
     url(r'^categories/(?P<slug>[\w-]+)/$', category, name='category'),
     url(r'^(?P<slug>[\w-]+)/delete/$', question_delete, name='question_delete'),

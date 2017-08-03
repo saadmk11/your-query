@@ -81,6 +81,8 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATES[0]['OPTIONS']['context_processors'].append("core.context_processors.notification_count")
+
 WSGI_APPLICATION = 'yourquery.wsgi.application'
 
 

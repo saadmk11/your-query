@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import QuestionForm, AnswerForm
-from .models import Category, Question, Answer
+from .models import Category, Question, Answer, SendNotification
 # Create your views here.
 
 
@@ -53,21 +53,20 @@ def question_detail(request, slug=None):
                   }
     return render(request, "questions/question_detail.html", context)
 
+
 @login_required()
 def question_ask(request):
-    if not request.user.is_authenticated:
-        return redirect("login")
-    else:
-        form = QuestionForm(request.POST or None)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.user = request.user
-            question.save()
-            return redirect(question.get_absolute_url())
-        context = { "form": form,
-                    "title": "Ask Question"
-                     }
+    form = QuestionForm(request.POST or None)
+    if form.is_valid():
+        question = form.save(commit=False)
+        question.user = request.user
+        question.save()
+        return redirect(question.get_absolute_url())
+    context = { "form": form,
+                "title": "Ask Question"
+              }
     return render(request, "questions/ask.html", context)
+
 
 @login_required()
 def question_update(request, slug=None):
@@ -86,6 +85,7 @@ def question_update(request, slug=None):
                     }
     return render(request, "questions/ask.html", context)
 
+
 @login_required()
 def question_delete(request, slug=None):
     question = get_object_or_404(Question, slug=slug)
@@ -97,6 +97,7 @@ def question_delete(request, slug=None):
         else:
             question.delete() 
             return redirect(request.user.get_absolute_url()) 
+
 
 @login_required()
 def answer_update(request, slug=None, pk=None):
@@ -116,6 +117,7 @@ def answer_update(request, slug=None, pk=None):
                     "title": "Update Answer"
                     }
     return render(request, "questions/answer.html", context)
+
 
 @login_required()
 def answer_delete(request, slug=None, pk=None):
@@ -160,3 +162,22 @@ def category(request, slug=None):
                 "category": category
               }
     return render(request, "questions/category.html", context)
+
+
+@login_required()
+def notification(request):
+    user = request.user
+    notification = SendNotification.objects.filter(user=user)
+    notification.update(viewed=True)
+
+    paginator = Paginator(notification, 12)
+    page = request.GET.get("page")
+    try:
+        query_list = paginator.page(page)
+    except PageNotAnInteger:
+        query_list = paginator.page(1)
+    except EmptyPage:
+        query_list = paginator.page(paginator.num_pages)
+
+    context = { "query_list": query_list }
+    return render(request, "questions/notification.html", context)

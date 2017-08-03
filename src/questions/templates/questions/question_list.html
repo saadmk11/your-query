@@ -13,15 +13,17 @@
 <hr>
 {% for question in query_list %}
 <div class="list-group">
-  <a href="{{question.get_absolute_url}}" class="list-group-item list-group-item-action flex-column align-items-start">
+  <div class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
-      <h4 class="mb-1"><b>{{ question.qus }}</b></h4>
-      <small>Asked {{ question.updated|timesince }} ago By <b>{{ question.user.username }}</b></small><br>
-      <small><b>Category:</b> {{ question.category }}</small>
+      <h4 class="mb-1"><b><a href="{{question.get_absolute_url}}" >{{ question.qus }}</a></b>
+      <small>Asked {{ question.updated|timesince }} ago By <b>
+      <a href="{{question.user.get_absolute_url}}" >{{ question.user.username }}</a>
+      </b></small></h4>
+      <small><b>Category:</b> <a href="{{question.category.get_absolute_url}}" >{{ question.category }}</a></small>
     </div>
     <p class="mb-1">{{ question.details|linebreaks|truncatechars:120 }}</p>
 
-  </a>
+  </div>
 </div>
 {% endfor %}
 

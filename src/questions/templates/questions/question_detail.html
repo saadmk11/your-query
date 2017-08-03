@@ -4,41 +4,97 @@
 
 {% block content %}
 
-
-<h2>Question:</h2>
-<h3>{{ question.qus }}</h3><br>
-<a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a><br>
-<a href="{{question.category.get_absolute_url}}">{{ question.category }}</a><br>
+<h2>{{ question.qus }}
+<small>Asked by <a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a></small>
 {% if request.user == question.user %}
-<a href="{{question.get_absolute_url}}edit/">Edit</a><br>
-<a href="{{question.get_absolute_url}}delete/">Delete</a><br>
+<span style="float: right;">
+<a class="btn btn-success btn-sm" href="{{question.get_absolute_url}}edit/" role="button">Edit</a>
+<a class="btn btn-danger btn-sm" href="{{question.get_absolute_url}}delete/" role="button">Delete</a>
+</span>
 {% endif %}
-{{ question.created }}<br>
-{{ question.updated }}<br>
-<p>{{ question.details }}</p><br>
+</h2> 
+<hr>
+<b>Created: </b>{{ question.created }}<br>
+<b>Updated: </b>{{ question.updated }}<br>
+<b>Category: </b><a href="{{question.category.get_absolute_url}}">{{ question.category }}</a>
+<hr>
+<strong>Details</strong>
+<hr>
+<p>{{ question.details }}</p>
+<hr>
 
 {% if request.user.is_authenticated %}
 <form method="POST" action="" >
     {% csrf_token %}
     {{ form|crispy }}
-    <br>
+
     <input class="btn btn-success" type="submit" value='Submit'>
 </form>
+<hr>
 {% endif %}
 
+<div class="container">
 
-<h2>Answers:</h2>
-{% for answer in answers_list %}
-<a href="{{answer.user.get_absolute_url}}">{{ answer.user.username }}</a><br>
-{% if request.user == answer.user %}
-<a href="{% url 'questions:answer_update' slug=answer.question.slug pk=answer.pk %}">Edit</a><br>
-<a href="{% url 'questions:answer_delete' slug=answer.question.slug pk=answer.pk %}">Delete</a><br>
-{% endif %}
-{{ answer.created }}<br>
-{{ answer.updated }}<br>
-<p>{{ answer.ans }}</p>
+    <div class="row">
 
-{% endfor %}
+        <div class="col-sm-12">
 
+            <h2>Answers:</h2>
+
+        </div><!-- /col-sm-12 -->
+
+    </div><!-- /row -->
+
+    <hr>
+
+    {% for answer in answers_list %}
+
+        {% if answer.user.picture %}
+        <div class="col-sm-1">
+
+            <div class="thumbnail">
+
+                <img class="img-responsive user-photo" src="{{ answer.user.picture.url }}">
+
+            </div><!-- /thumbnail -->
+
+        </div><!-- /col-sm-1 -->
+        {% else %}
+                <div class="col-sm-1">
+                <h4 align="center"><small>No <br>Image</small></h4>
+        </div><!-- /col-sm-1 -->
+        {% endif %}
+
+        <div class="col-sm-11">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <strong>
+                    <a href="{{answer.user.get_absolute_url}}">{{ answer.user.username }}</a>
+                    </strong>
+                    <span style="padding-left: 5px;" >
+                    {% if request.user == answer.user %}
+                        (<a href="{% url 'questions:answer_update' slug=answer.question.slug pk=answer.pk %}">Edit</a>&nbsp;/
+                        <a href="{% url 'questions:answer_delete' slug=answer.question.slug pk=answer.pk %}">Delete</a>)
+                    {% endif %}
+                    </span> 
+                    <span style="float: right;" class="text-muted">
+                    {{ answer.updated|timesince }} ago
+                    </span>
+
+                </div>
+
+                <div class="panel-body">
+                    {{ answer.ans }}
+                </div><!-- /panel-body -->
+
+            </div><!-- /panel panel-default -->
+
+            <hr>
+
+        </div><!-- /col-sm-5 -->
+  {% endfor %}
+</div><!-- /container -->
 
 {% endblock content %}
