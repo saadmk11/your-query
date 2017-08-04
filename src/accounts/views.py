@@ -5,6 +5,7 @@ from django.contrib.auth import (authenticate,
                                  logout
                                 )
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserLoginForm, UserRegistrationForm, UserProfileUpdateForm
@@ -80,6 +81,7 @@ def user_profile_update(request, username=None): # updates User profile
             profile = form.save(commit=False)
             profile.email = email
             profile.save() # Saves the Updated Profile
+            messages.success(request, 'Profile was Updated.')
             return redirect(profile.get_absolute_url())
         context = {
                   "form": form,

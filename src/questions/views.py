@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import Http404
@@ -46,6 +47,7 @@ def question_detail(request, slug=None):
             answer.user = request.user
             answer.question = question
             answer.save()
+            messages.success(request, 'Answer was Posted.')
             form = AnswerForm()    
         context = { "question": question,
                     "form": form,
@@ -61,6 +63,7 @@ def question_ask(request):
         question = form.save(commit=False)
         question.user = request.user
         question.save()
+        messages.success(request, 'Question was Posted.')
         return redirect(question.get_absolute_url())
     context = { "form": form,
                 "title": "Ask Question"
@@ -79,6 +82,7 @@ def question_update(request, slug=None):
             question = form.save(commit=False)
             question.user = request.user
             question.save()
+            messages.success(request, 'Question was Updated.')
             return redirect(question.get_absolute_url())
         context = { "form": form,
                     "title": "Edit Question"
@@ -96,6 +100,7 @@ def question_delete(request, slug=None):
             raise Http404
         else:
             question.delete() 
+            messages.error(request, 'Question was Deleted.')
             return redirect(request.user.get_absolute_url()) 
 
 
@@ -112,6 +117,7 @@ def answer_update(request, slug=None, pk=None):
             answer.user = request.user
             answer.question = question
             answer.save()
+            messages.success(request, 'Answer was Updated.')
             return redirect(question.get_absolute_url())
         context = { "form": form,
                     "title": "Update Answer"
@@ -130,6 +136,7 @@ def answer_delete(request, slug=None, pk=None):
             raise Http404
         else:
             answer.delete() 
+            messages.error(request, 'Answer was Deleted.')
             return redirect(question.get_absolute_url())
 
 

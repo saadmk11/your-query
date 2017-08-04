@@ -1,0 +1,30 @@
+<!-- {% if messages %}
+
+{% if messages.error %}
+
+<ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+{% endif %} -->
+
+{% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}

@@ -3,7 +3,7 @@
 {% block title %} Question Details | {{ block.super }}{% endblock title %}
 
 {% block content %}
-
+{% include "core/messages.html" %}
 <h2>{{ question.qus }}
 <small>Asked by <a href="{{question.user.get_absolute_url}}">{{ question.user.username }}</a></small>
 {% if request.user == question.user %}
