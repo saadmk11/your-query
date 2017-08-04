@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+
+{% block title %} Categories | {{ block.super }}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2>Categories</h2>
+    <hr>
+<div>
+<div class="list-group">
+{% for obj in categories %}
+  <a href="{{ obj.get_absolute_url }}" class="list-group-item">{{obj.name}}</a>
+{% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,52 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'home' %}" style="padding-left: 30px;">Your-Query.com</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'home' %}">Home </a></li>
+        <li><a href="{% url 'questions:question_list' %}">Questions</a></li>
+        <li><a href="{% url 'questions:category_list' %}">Categories</a></li>
+        <li><a href="{% url 'questions:question_ask' %}">Ask</a></li>
+        <li><a href="{% url 'about' %}">About Us</a></li>
+        <li><a href="{% url 'contact' %}">Contact Us</a></li> 
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right" style="padding-right: 30px;">
+        {% if request.user.is_authenticated %}
+          {% if request.user.picture %}
+            <li style="padding-top: 7px;"><img title="profile image" class="img-circle" src="{{ request.user.picture.url }}" id="nav-img"></li>
+          {% endif %}
+        <li class="dropdown">
+          <a href="{{request.user.get_absolute_url}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          {{ request.user.username }} 
+          {% if not_viewed %}
+          &nbsp;<span class="badge">{{ not_viewed }}</span>
+          {% endif %}
+          <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+              <li><a href="{{request.user.get_absolute_url}}">Profile</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'questions:notification' %}">Notifications &nbsp; &nbsp;<span class="badge">{{ not_viewed }}</span></a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div>
+</nav>

@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+
+{% block title %} Notifications | {{ block.super }}{% endblock title %}
+
+{% block content %}
+
+<h1>Notifications</h1>
+<hr>
+{% if query_list %}
+
+{% for obj in query_list %}
+    <div class="list-group">
+    <a href="{{ obj.question.get_absolute_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h4 class="mb-1"><b>{{ obj.message }} for "{{ obj.question }}"</b></h4>
+        {{ obj.sent|timesince }} ago from <b>{{ obj.from_user }}</b>
+    </div>
+    <p class="mb-1">{{ question.details|linebreaks|truncatechars:120 }}</p>
+
+  </a>
+</div>
+
+{% endfor %}
+
+{% else %}
+
+No Notifications Found.
+
+{% endif %}
+
+{% include "core/paginator.html" %}
+
+{% endblock content %}

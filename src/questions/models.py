@@ -1,0 +1,103 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.db import models
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils.text import slugify
+
+# Create your models here.
+User = settings.AUTH_USER_MODEL
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=128, unique=True, verbose_name="category")
+    slug = models.SlugField(unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("questions:category", kwargs={"slug": self.slug})
+
+    class Meta:
+        ordering = ['-id']
+
+
+class Question(models.Model):
+    user = models.ForeignKey(User)
+    category = models.ForeignKey(Category)
+    qus = models.CharField(max_length=256, verbose_name="question")
+    details = models.TextField(blank=True)
+    slug = models.SlugField(unique=True, max_length=256)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.qus
+
+    def get_absolute_url(self):
+        return reverse("questions:question_detail", kwargs={"slug": self.slug})
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+    def _get_unique_slug(self):
+        slug = slugify(self.qus)
+        unique_slug = slug
+        num = 1
+        while Question.objects.filter(slug=unique_slug).exists():
+            unique_slug = '{}-{}'.format(slug, num)
+            num += 1
+        return unique_slug
+ 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_unique_slug()
+        super(Question, self).save()
+
+
+class Answer(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(Question)
+    ans = models.TextField(verbose_name="answer")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.question.qus
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+
+class SendNotification(models.Model):
+    user = models.ForeignKey(User, related_name='user')
+    from_user = models.ForeignKey(User, related_name='from_user')
+    question = models.ForeignKey(Question)
+    message = models.CharField(max_length=256)
+    sent = models.DateTimeField(auto_now_add=True)
+    viewed = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.question.qus
+
+    class Meta:
+        ordering = ['-sent']
+
+
+@receiver(post_save, sender=Answer)
+def send_notification(sender, **kwargs):
+    if kwargs.get('created', False):
+        instance = kwargs[ 'instance' ]
+        question = instance.question
+        if instance.user == question.user:
+            pass
+        else:
+            from_user = instance.user
+            user = question.user
+            notification = SendNotification.objects.create(user=user, 
+                                                           from_user=from_user, 
+                                                           question=question, 
+                                                           message="You Have an Answer!")
