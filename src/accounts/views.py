@@ -13,7 +13,7 @@ from .models import User
 
 # Create your views here.
 def login_view(request): # users will login with their Email & Password
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         return redirect("home")
     else:
         title = "Login"
@@ -33,7 +33,7 @@ def login_view(request): # users will login with their Email & Password
 
 
 def register_view(request): # Creates a New Account & login New users
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         return redirect("home")
     else:
         title = "Register"

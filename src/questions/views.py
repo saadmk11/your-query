@@ -40,7 +40,7 @@ def question_detail(request, slug=None):
     context = { "question": question,
                 "answers_list": answers_list,
                  }
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         form = AnswerForm(request.POST or None)
         if form.is_valid():
             answer = form.save(commit=False)
@@ -93,7 +93,7 @@ def question_update(request, slug=None):
 @login_required()
 def question_delete(request, slug=None):
     question = get_object_or_404(Question, slug=slug)
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated():
         raise Http404 
     else:
         if question.user != request.user:
@@ -129,7 +129,7 @@ def answer_update(request, slug=None, pk=None):
 def answer_delete(request, slug=None, pk=None):
     question = get_object_or_404(Question, slug=slug)
     answer = get_object_or_404(Answer, pk=pk)
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated():
         raise Http404 
     else:
         if answer.user != request.user:
