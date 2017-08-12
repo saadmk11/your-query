@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.conf import settings
-from django.db.models.signals import post_save
 from django.db import models
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -85,19 +83,3 @@ class SendNotification(models.Model):
 
     class Meta:
         ordering = ['-sent']
-
-
-@receiver(post_save, sender=Answer)
-def send_notification(sender, **kwargs):
-    if kwargs.get('created', False):
-        instance = kwargs[ 'instance' ]
-        question = instance.question
-        if instance.user == question.user:
-            pass
-        else:
-            from_user = instance.user
-            user = question.user
-            notification = SendNotification.objects.create(user=user, 
-                                                           from_user=from_user, 
-                                                           question=question, 
-                                                           message="You Have an Answer!")
