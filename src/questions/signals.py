@@ -4,9 +4,8 @@ from .models import Answer, SendNotification
 
 
 @receiver(post_save, sender=Answer)
-def send_notification(sender, **kwargs):
-    if kwargs.get('created', False):
-        instance = kwargs[ 'instance' ]
+def send_notification(created, sender, instance, *args, **kwargs):
+    if created:
         question = instance.question
         if instance.user == question.user:
             pass
